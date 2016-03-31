@@ -17,6 +17,9 @@ pages = [
 	'https://www.thehartford.com/about-us/beth-bombara',
 	'https://www.thehartford.com/about-us/jonathan-bennett'
 ]
+
+output = File.open( "outputfile.txt","w" )
+
 if pages.nil?
 	puts "No Input"
 elsif pages.respond_to?("each")
@@ -29,10 +32,10 @@ elsif pages.respond_to?("each")
 		response.raw
 		# and has been parsed a bit to get :language, :topics, :tags, :entities, :relations, :locations
 		# as lists of hashes
-		puts "----" + page + "----"
+		output <<  "----" + page + "----"
 		response.entities.each{|t| 
 			if t[:type] == "Person"
-				puts t[:name]
+				output <<  t[:name]
 			end
 		}
 	end
@@ -45,10 +48,12 @@ else
 	response.raw
 	# and has been parsed a bit to get :language, :topics, :tags, :entities, :relations, :locations
 	# as lists of hashes
-	puts "----" + pages + "----"
+	output <<  "----" + pages + "----"
 	response.entities.each{|t| 
 		if t[:type] == "Person"
-			puts t[:name]
+			output <<  t[:name]
 		end
 	}
 end
+
+output.close
